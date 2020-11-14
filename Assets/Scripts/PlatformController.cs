@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaformController : MonoBehaviour
+public class PlatformController : MonoBehaviour
 {
     Rigidbody2D rb;
     float speed = 4; //float 9.0 or 6.7 ... decimal number
