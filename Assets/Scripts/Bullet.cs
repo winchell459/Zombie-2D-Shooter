@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float Speed = 10;
+    public float Damage = 1;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("Ground"))
+        {
+            Destroy(gameObject); //destroys the bullet
+        }
+        else if (collision.CompareTag("Enemy"))
+        {
+            //damage enemy
+            Vector2 normal = collision.transform.position - transform.position;
+            normal = normal.normalized;
+            normal *= Damage; // normal = normal * Damage
+            collision.gameObject.SendMessage("TakeDamage", normal);
+
+            Destroy(gameObject); //destroys the bullet
+        }
     }
 }

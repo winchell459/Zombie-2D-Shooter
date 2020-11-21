@@ -27,7 +27,7 @@ public class FiringScript : MonoBehaviour
 
             GameObject bullet = Instantiate(BulletPrefab, transform.position, Quaternion.identity);
             bullet.transform.up = fireDirection;
-            bullet.GetComponent<Rigidbody2D>().velocity = fireDirection * 10;
+            bullet.GetComponent<Rigidbody2D>().velocity = fireDirection * bullet.GetComponent<Bullet>().Speed;
             Destroy(bullet, 5);
         }
         
