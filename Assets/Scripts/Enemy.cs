@@ -76,4 +76,32 @@ public class Enemy : MonoBehaviour
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
     }
+
+    float attackStartTime;
+    int attackSpree;
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+            attackStartTime = Time.time;
+            attackSpree = 0;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Player"))
+        {
+            if(attackStartTime + attackSpree < Time.time)
+            {
+                collision.transform.SendMessage("TakeDamage", Damage);
+                attackSpree += 1;
+            }
+        }
+    }
 }

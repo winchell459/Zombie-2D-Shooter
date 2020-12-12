@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlatformController : MonoBehaviour
 {
@@ -13,9 +14,15 @@ public class PlatformController : MonoBehaviour
     private float checkGroundRadius = 0.05f;
     public LayerMask groundLayer;
 
+
+    public int Health = 30;
+    private int maxHealth;
+    public Text HealthText;
+
     // Start is called before the first frame update
     void Start()
     {
+        maxHealth = Health;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -71,5 +78,22 @@ public class PlatformController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        Health = Mathf.Clamp(Health, 0, maxHealth);
+        HealthText.text = Health.ToString();
+        if (Health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void Heal(int health)
+    {
+        Health += health;
+        Health = Mathf.Clamp(Health, 0, maxHealth);
     }
 }
