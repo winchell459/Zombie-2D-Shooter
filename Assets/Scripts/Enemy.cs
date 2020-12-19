@@ -6,7 +6,8 @@ public class Enemy : MonoBehaviour
 {
     public float Speed = 1;
     public float Damage = 1;
-    public float Health = 5.0f; //0 0.1 1000.596 100.0
+    //public float Health = 5.0f; //0 0.1 1000.596 100.0
+    public Health Health;
     int myint = 5; //1 -70 1000000
     
 
@@ -61,12 +62,17 @@ public class Enemy : MonoBehaviour
         
     }
 
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
+
     public void TakeDamage(Vector2 normalDamage)
     {
         float damage = normalDamage.magnitude; //pull out damage from normalDamage
-        Health -= damage;
+        Health.Hurt(damage, gameObject);
 
-        if (Health <= 0) Destroy(gameObject);
+        //if (Health <= 0) Destroy(gameObject);
 
         damagedTime = Time.time;
         damagedNormal = normalDamage;
@@ -103,5 +109,34 @@ public class Enemy : MonoBehaviour
                 attackSpree += 1;
             }
         }
+    }
+}
+
+[System.Serializable]
+public class Health
+{
+    public GameObject HealthBar;
+    private bool healthSetup;
+    private float healthBarLength;
+    public float CurrentHealth;
+    public float MaxHealth;
+
+    public void Hurt(float damage, GameObject gameObject)
+    {
+        CurrentHealth = Mathf.Clamp(CurrentHealth - damage, 0, MaxHealth);
+        setHealthBar();
+        if (CurrentHealth <= 0) gameObject.SendMessage("Die");
+    }
+
+    private void setHealthBar()
+    {
+        if (!healthSetup)
+        {
+            healthBarLength = HealthBar.transform.localScale.x;
+            healthSetup = true;
+        }
+        float healthPercent = CurrentHealth / MaxHealth;
+        HealthBar.transform.localScale = new Vector3( healthPercent * healthBarLength, HealthBar.transform.localScale.y, HealthBar.transform.localScale.z);
+        HealthBar.SetActive(true);
     }
 }
